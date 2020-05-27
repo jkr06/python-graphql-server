@@ -1,0 +1,60 @@
+enum  UserStatus {
+  ACTIVE
+  INACTIVE
+  BANNED
+}
+
+type Query {
+    user(username: String!, status: UserStatus): User
+    swapi_people(person: String!): [StarWarPeople]
+}
+
+type Mutation {
+  add_user(username: String, name: String, email: String): Response
+}
+
+type Subscription {
+  users: User
+}
+
+type Response {
+  status: String
+}
+
+type User {
+  name: String
+  email: String
+}
+
+type StarWarPeople {
+  name: String
+  gender: String
+  hair_color: String
+  vehicles: [Vehicle]
+  films: [Film]
+  starships: [Starship]
+}
+
+type Vehicle {
+  name: String
+  passengers: Int
+  vehicle_class: String
+  cargo_capacity: Int
+  consumables: String
+  cost_in_credits: Int
+  created: String
+  crew: Int
+  edited: String
+  length: Float
+  manufacturer: String
+  max_atmosphering_speed: Int
+  model: String
+}
+
+type Film {
+  title: String
+}
+
+type Starship {
+  name: String
+}
