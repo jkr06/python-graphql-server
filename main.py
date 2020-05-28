@@ -11,7 +11,7 @@ type_defs = load_schema_from_path("./schema")
 schema = make_executable_schema(type_defs, *[swapi_types, user_types])
 
 async def homepage(request):
-    return PlainTextResponse("Homepage")
+    return PlainTextResponse("Welcome. Open /graphql for the graphql playground")
 
 
 app = Starlette()
