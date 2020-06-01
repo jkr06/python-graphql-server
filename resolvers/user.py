@@ -1,7 +1,10 @@
 import asyncio
+from typing import Any
+
 from ariadne import ObjectType, SubscriptionType
 from graphql import GraphQLResolveInfo
-from typing import Any
+from starlette.background import BackgroundTask
+
 
 USERS = [
   {
@@ -39,13 +42,17 @@ async def user(obj: Any, info: GraphQLResolveInfo,
 @mutation.field("add_user")
 async def add_user(obj, info: GraphQLResolveInfo, username: str,
     name: str, email: str):
+  task = BackgroundTask(_add_user, username, name, email)
+  info.context['request'].state.background = task
+  return {"status": "PENDING"}
+
+def _add_user(username: str, name: str, email: str):
   USERS.append({
     "username": username,
     "name": name,
     "status": "ACTIVE",
     "email": email
   })
-  return {"status": "ACTIVE"}
 
 @subscription.source("users")
 async def users_generator(obj, info):
@@ -56,5 +63,3 @@ async def users_generator(obj, info):
 @subscription.field("users")
 def users_resolver(user, info):
     return user
-
-
